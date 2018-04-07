@@ -3,8 +3,7 @@
  * 自定义配置
  */
 if (getenv('IS_IN_HEROKU')) {
-    $url = parse_url(getenv("DATABASE_URL"));
-    
+    $url = parse_url(getenv("DATABASE_URL"));   
     $db_config = [
         'connection' => 'pgsql',
         'host' => $url["host"],
@@ -12,7 +11,6 @@ if (getenv('IS_IN_HEROKU')) {
         'username'  => $url["user"],
         'password'  => $url["pass"],
     ];
-    var_dump($db_config);
 }else{
     $db_config=[
         'connection' => env('DB_CONNECTION', 'mysql'),
@@ -77,11 +75,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => $db_config['host'],
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => $db_config['database'],,
+            'username' => $db_config['username'],
+            'password' => $db_config['password'],
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
