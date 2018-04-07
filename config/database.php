@@ -14,6 +14,10 @@ if (getenv('IS_IN_HEROKU')) {
 }else{
     $db_config=[
         'connection' => env('DB_CONNECTION', 'mysql'),
+        'host' => env('DB_HOST', 'localhost'),
+        'database'  => env('DB_DATABASE', 'forge'),
+        'username'  => env('DB_USERNAME', 'forge'),
+        'password'  => env('DB_PASSWORD', ''),
     ];
 }  
 return [
