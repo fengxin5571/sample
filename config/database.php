@@ -1,4 +1,7 @@
 <?php
+/*
+ * 自定义配置
+ */
 if (getenv('IS_IN_HEROKU')) {
     $url = parse_url(getenv("DATABASE_URL"));
     $db_config = [
