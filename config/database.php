@@ -1,5 +1,18 @@
 <?php
-
+if (getenv('IS_IN_HEROKU')) {
+    $url = parse_url(getenv("DATABASE_URL"));
+    $db_config = [
+        'connection' => 'pgsql',
+        'host' => $url["host"],
+        'database'  => substr($url["path"], 1),
+        'username'  => $url["user"],
+        'password'  => $url["pass"],
+    ];
+}else{
+    $db_config=[
+        'connection' => env('DB_CONNECTION', 'mysql'),
+    ];
+}  
 return [
 
     /*
@@ -12,8 +25,7 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => $db_config['connection'],
 
     /*
     |--------------------------------------------------------------------------
