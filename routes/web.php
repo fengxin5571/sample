@@ -19,3 +19,11 @@ Route::get("/about","StaticPagesController@about")->name("about");
 // Route::match(array('get','post'), "/","StaticPagesController@home")->name("home");
 Route::get("signup","UsersController@create")->name("signup");
 Route::resource("users", "UsersController");//自动创建路由
+
+/*
+ * 登录
+ */
+Route::get("login","SessionsController@create")->name("login");
+Route::post("login","SessionsController@store")->name("login");
+Route::delete("logout","SessionsController@destroy")->name("logout");
+Route::post("logout","SessionsController@destroy")->name("logout");
