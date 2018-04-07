@@ -4,6 +4,7 @@
  */
 if (getenv('IS_IN_HEROKU')) {
     $url = parse_url(getenv("DATABASE_URL"));
+    
     $db_config = [
         'connection' => 'pgsql',
         'host' => $url["host"],
@@ -11,6 +12,7 @@ if (getenv('IS_IN_HEROKU')) {
         'username'  => $url["user"],
         'password'  => $url["pass"],
     ];
+    var_dump($db_config);
 }else{
     $db_config=[
         'connection' => env('DB_CONNECTION', 'mysql'),
