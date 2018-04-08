@@ -27,3 +27,6 @@ Route::get("login","SessionsController@create")->name("login");
 Route::post("login","SessionsController@store")->name("login");
 Route::delete("logout","SessionsController@destroy")->name("logout");
 Route::post("logout","SessionsController@destroy")->name("logout");
+Route::get("admin_login","SessionsController@login")->name("admin_login");
+Route::post("admin_login","SessionsController@dologin")->name("admin_login");
+Route::post("admin_logout","SessionsController@admin_logout")->name("admin_logout");

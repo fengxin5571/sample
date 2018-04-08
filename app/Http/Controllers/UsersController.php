@@ -8,19 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
-    
+    public function __construct(){
+        $this->middleware("islogin",['only'=>['show']]);
+        
+    }
     //注册
     public function create(){
-       
         return view("users.create");   
     }
     //显示用户
     public  function show(User $user){
-        if(Auth::check()&&Auth::user()==$user){
-            return view('users.show', compact('user'));
-        }else{
-            return redirect("login");
-        }
+        return view('users.show', compact('user'));        
         
     }
     //注册处理

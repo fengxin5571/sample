@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
+use Illuminate\Support\Facades\Auth;
+use App\Exceptions\AdminUserProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -24,7 +25,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+        Auth::provider('admin', function ($app, array $config) {
+            // 返回 Illuminate\Contracts\Auth\UserProvider 实例...
+            return new AdminUserProvider($app['hash'], $config['model']);
+        });
+        
     }
 }
