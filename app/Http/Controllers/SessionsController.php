@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class SessionsController extends Controller
 {
     public function __construct(){
-        $this->middleware("islogin",['only'=>["create"]]);
+        $this->middleware("guest",['only'=>["create"]]);
     }
     //显示登录页面
     public  function create(){

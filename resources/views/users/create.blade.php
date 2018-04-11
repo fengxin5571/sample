@@ -19,7 +19,14 @@
             <label for="email">邮箱：</label>
             <input type="text" name="email" class="form-control" value="{{ old('email') }}">
           </div>
-
+          <div class="form-group">
+            <label for="sex">性别：</label>
+            <div class=""radio"">
+            	<label><input type="radio" name="sex" value="0" checked="checked">保密</label>
+            	<label><input type="radio" name="sex" value="1">男</label>
+            	<label><input type="radio" name="sex" value="2">女</label>
+          	</div>
+          </div>
           <div class="form-group">
             <label for="password">密码：</label>
             <input type="password" name="password" class="form-control" value="{{ old('password') }}">
