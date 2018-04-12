@@ -118,11 +118,13 @@ return [
 
     'attributes' => [
         'name' => '名称',
+        'admin_name'=>'管理员姓名',
         'username' => '用户名',
         'email' => '邮箱',
         'first_name' => '名',
         'last_name' => '姓',
         'password' => '密码',
+        'admin_password'=>'管理员密码',
         'password_confirmation' => '确认密码',
         'city' => '城市',
         'country' => '国家',

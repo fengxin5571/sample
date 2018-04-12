@@ -23,7 +23,7 @@ class SessionsController extends Controller
         ]);
         if(Auth::attempt($data,$request->has("remember"))){
             session()->flash("success","欢迎回来");
-            return redirect()->route("users.show",[Auth::user()]);
+            return redirect()->intended(route("users.show",[Auth::user()]));
         }else{
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             return redirect()->back();
@@ -44,11 +44,16 @@ class SessionsController extends Controller
             'admin_email'=>'required|email|max:255',
             'admin_password'=>'required',
             
+        ],[
+            "admin_email.required"=>":attribute 不能为空",
+            "admin_password"=>":attribute 不能为空"
+        ],[
+            "admin_email"=>'管理员邮箱',
+            "admin_password"=>"管理员密码"
         ]);
-        $data['admin_name']="fengxin";
         if(Auth::guard("admin")->attempt($data,$request->has("remember"))){
             session()->flash("success","欢迎回来");
-            return redirect()->route("home");
+            return redirect()->intended(route("admins.show",Auth::guard("admin")->user()));
         }else{
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             return redirect()->back();

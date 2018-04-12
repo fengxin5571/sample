@@ -5,14 +5,15 @@
       <nav>
         <ul class="nav navbar-nav navbar-right">
           @if(Auth::guard('admin')->check())
-          <li><a href="#">用户列表</a></li>
+          <li><a href="#">管理员列表</a></li>
+          <li><a href="{{route('users.index')}}">用户列表</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 {{ Auth::guard('admin')->user()->admin_name }} <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
                 <li><a href="{{Auth::guard('admin')->user()->id}}">个人中心</a></li>
-                <li><a href="{{route('users.edit')}}">编辑资料</a></li>
+                <li><a href="{{route('admins.edit',Auth::guard("admin")->user())}}">编辑资料</a></li>
                 <li class="divider"></li>
                 <li>
                   <a id="logout" href="#">
@@ -27,7 +28,7 @@
             </li>
           @else
           @if(Auth::check())
-          <li><a href="#">用户列表</a></li>
+          <li><a href="{{route("users.index")}}">用户列表</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 {{ Auth::user()->name }} <b class="caret"></b>

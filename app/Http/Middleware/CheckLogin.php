@@ -5,17 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use Closure;
 class CheckLogin{
     public function handle($request,Closure $next){
-        $user=$request->user;
-        if($user){
-            if(Auth::user()!=$user){
-                return redirect()->route("login");
-            }
-        }else{
-            if(Auth::check()){
-                return redirect()->route("users.show",[Auth::user()]);
-            }
+        if(!Auth::guard("admin")->check()){
+            return redirect()->route("admin_login");
         }
-        
         return $next($request);
     }
 }

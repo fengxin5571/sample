@@ -31,4 +31,10 @@ class Admin extends Authenticatable
     public function getAuthPassword(){
         return $this->admin_password;
     }
+    //用户头像方法
+    public function gravatar($size = '100')
+    {
+        $hash = md5(strtolower(trim($this->attributes['admin_email'])));
+        return "http://www.gravatar.com/avatar/$hash?s=$size";
+    }
 }

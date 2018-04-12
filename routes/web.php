@@ -27,6 +27,11 @@ Route::get("login","SessionsController@create")->name("login");
 Route::post("login","SessionsController@store")->name("login");
 Route::delete("logout","SessionsController@destroy")->name("logout");
 Route::post("logout","SessionsController@destroy")->name("logout");
+/*管理员*/
 Route::get("admin_login","SessionsController@login")->name("admin_login");
 Route::post("admin_login","SessionsController@dologin")->name("admin_login");
 Route::post("admin_logout","SessionsController@admin_logout")->name("admin_logout");
+Route::get("admins/{admin}","AdminsConstroll@admin_show")->name("admins.show");
+Route::get("admins/{admin}/edit","AdminsConstroll@admin_edit")->name("admins.edit");
+Route::post("admins/{admin}/edit","AdminsConstroll@admin_edit")->name("admins.edit");
+Route::post("admins/{admin}/{user}","AdminsConstroll@destroy")->name("admins.destroy");
