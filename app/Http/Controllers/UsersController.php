@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateUserPatch;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
@@ -16,7 +17,7 @@ class UsersController extends Controller
          * 使用中间件
          */
         $this->middleware('auth', [
-            'except' => ['show','create', 'store','index']
+            'except' => ['show','create', 'store','index','confirmEmail']
         ]);
         $this->middleware("guest",["only"=>['create']]);
        
@@ -51,11 +52,10 @@ class UsersController extends Controller
             "password"=>bcrypt($request->password),
             'sex'=>$request->sex,
         ]);
-        Auth::login($user);
-        session()->flash("success","欢迎，您将在这里开启一段新的旅程~");
-        return redirect()->route("users.show",[$user]);
-        
-        
+        $this->sendEmailConfirmationTo($user);
+        session()->flash('success', '验证邮件已发送到你的注册邮箱上，请注意查收。');
+        return redirect('/');
+
     }
     //编辑用户
     public function edit(Request $request,User $user){
@@ -80,5 +80,29 @@ class UsersController extends Controller
     public function destroy(User $user){
         
     }
-    
+    /*
+     * 发送邮件事件
+     */
+    protected function sendEmailConfirmationTo($user){
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'aufree@yousails.com';
+        $name = 'Aufree';
+        $to = $user->email;
+        $subject = "感谢注册 Sample 应用！请确认你的邮箱。";
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+        
+    }
+    /*激活邮件事件*/
+    public function confirmEmail($token){
+        $user=User::where("activation_token",$token)->firstOrFail();
+        $user->activated=1;
+        $user->activation_token=null;
+        $user->save();
+        Auth::login($user);
+        session()->flash('success', '恭喜你，激活成功！');
+        return redirect()->route('users.show', [$user]);
+    }
 }

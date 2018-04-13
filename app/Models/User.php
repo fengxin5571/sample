@@ -32,6 +32,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    /*
+     * 模型完成初始化后，进行加载
+     */
+    public static function boot(){
+        parent::boot();
+        static::creating(function ($user){//模型创建之前的事件
+            $user->activation_token =str_random(30);
+        });
+    }
     //用户头像方法
     public function gravatar($size = '100')
     {
