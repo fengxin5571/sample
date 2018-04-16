@@ -16,10 +16,15 @@
           </a>
         </div>
 
-        <form method="POST" action="{{ route('users.update', $user->id )}}">
+        <form method="POST" action="{{ route('users.update', $user->id )}}" enctype="multipart/form-data">
             {{ method_field('PATCH') }}
             {{ csrf_field() }}
-
+            <div class="form-group">
+              <label for="name">上传图片：</label>
+              <input type="file" name="user_img" class="form-control" value="">
+              <p class="text-danger">{{$errors->first('name')}}</p>
+              <img src="/storage/images/6.bmp" width="500"/>
+            </div>
             <div class="form-group">
               <label for="name">名称：</label>
               <input type="text" name="name" class="form-control" value="{{ $user->name }}">
