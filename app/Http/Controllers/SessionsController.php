@@ -26,8 +26,9 @@ class SessionsController extends Controller
                 session()->flash("success","欢迎回来");
                 return redirect()->intended(route("users.show",[Auth::user()]));
             }else{
+                $token=Auth::user()->activation_token;
                 Auth::logout();
-                session()->flash('warning', '你的账号未激活，请检查邮箱中的注册邮件进行激活。'.Auth::user()->activation_token);
+                session()->flash('warning', "你的账号未激活，请检查邮箱中的注册邮件进行激活。".$token);
                 return redirect("/");
             }
             
