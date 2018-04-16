@@ -20,6 +20,7 @@
        
     @endforeach
   </ul>
-  {!! $users->render() !!}
+
+  {{ $users->links() }}
 </div>    
 @stop
