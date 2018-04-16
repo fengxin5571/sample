@@ -14,7 +14,7 @@
             <label for="name">名称：</label>
             <input type="text" name="name" class="form-control" value="{{ old('name') }}">
           </div>
-
+            
           <div class="form-group">
             <label for="email">邮箱：</label>
             <input type="text" name="email" class="form-control" value="{{ old('email') }}">
