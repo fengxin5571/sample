@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -60,12 +61,48 @@ class User extends Authenticatable
         return $sexs;
     }
     /*
-     * 模型关联一对多
+     * 微博模型关联一对多
      */
     public function statuses(){
         return $this->hasMany(Status::class);
     }
-    public function feed(){
-        return $this->statuses()->orderBy("created_at","desc");
+    /*
+     * 粉丝多对多
+     */
+    public function followers(){
+        return $this->belongsToMany(User::class,"followers","user_id","follower_id");
     }
+    public function followings()
+    {
+        return $this->belongsToMany(User::Class, 'followers', 'follower_id', 'user_id');
+    }
+    public function feed(){
+        $user_ids = Auth::user()->followings->pluck('id')->toArray();
+        array_push($user_ids, Auth::user()->id);
+        return Status::whereIn("user_id",$user_ids)->orderBy("created_at","desc");
+    }
+    /*
+     * 判断是否被关注
+     */
+    public function isFollowing($user_id){
+        return $this->followings()->get()->contains($user_id);
+    }
+    /*
+     * 关注
+     */
+    public function follow($user_ids){
+        if(!is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->sync($user_ids,false);
+    }
+    /*取消关注*/
+    public function unfollow($user_ids)
+    {
+        if (!is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+    }
+    
 }
