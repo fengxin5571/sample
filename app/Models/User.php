@@ -59,4 +59,13 @@ class User extends Authenticatable
         }
         return $sexs;
     }
+    /*
+     * 模型关联一对多
+     */
+    public function statuses(){
+        return $this->hasMany(Status::class);
+    }
+    public function feed(){
+        return $this->statuses()->orderBy("created_at","desc");
+    }
 }

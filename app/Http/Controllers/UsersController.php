@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateUserPatch;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class UsersController extends Controller
 {
@@ -35,7 +36,8 @@ class UsersController extends Controller
     //显示用户
     public  function show(User $user){
         $this->authorize("show",$user);
-        return view('users.show', compact('user'));        
+        $statuses=$user->statuses()->orderBy("created_at","desc")->paginate(5);
+        return view('users.show', compact('user',"statuses"));        
         
     }
     //注册处理
@@ -73,7 +75,9 @@ class UsersController extends Controller
         if($request->password){
             $data['password']=bcrypt($request->password);
         }
-        $path=$request->file("user_img")->storeAs("public/images",$user->id.".".$request->file("user_img")->getClientOriginalExtension());
+        if($request->file("user_img")){
+            $path=$request->file("user_img")->storeAs("public/images",$user->id.".".$request->file("user_img")->getClientOriginalExtension());
+        }
         $user->update($data);
         session()->flash("success","个人资料更新成功！");
         return redirect()->route("users.show",$user);
