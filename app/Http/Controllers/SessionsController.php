@@ -24,6 +24,7 @@ class SessionsController extends Controller
         if(Auth::attempt($data,$request->has("remember"))){
             if(Auth::user()->activated){
                 session()->flash("success","欢迎回来");
+                session()->put("login_ip", [Auth::user()->id=>$request->getClientIp()]);
                 return redirect()->intended(route("users.show",[Auth::user()]));
             }else{
                 $token=Auth::user()->activation_token;
@@ -40,6 +41,7 @@ class SessionsController extends Controller
     //销毁会话（退出登录）
     public  function destroy(){
         Auth::logout();
+        session()->forget("logig_ip");
         session()->flash('success', '您已成功退出！');
         return redirect()->route("login");
     }

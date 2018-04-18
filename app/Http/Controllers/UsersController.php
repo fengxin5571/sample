@@ -34,8 +34,11 @@ class UsersController extends Controller
         return view("users.create");   
     }
     //显示用户
-    public  function show(User $user){
-       
+    public  function show(Request $request,User $user){
+        $login_ip=session()->get("login_ip");
+        if($login_ip[$user->id]!=$request->getClientIp()){
+            session()->flash("warning","和您上次登录ip不一样");
+        }
         $statuses=$user->statuses()->orderBy("created_at","desc")->paginate(5);
         return view('users.show', compact('user',"statuses"));        
         
