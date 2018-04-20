@@ -9,7 +9,7 @@
           @include('shared._user_info', ['user' => $user])
         </section>
         <section class="stats">
-          @include('shared._stats', ['user' => Auth::user()])
+          @include('shared._stats')
         </section>
       </div>
     </div>

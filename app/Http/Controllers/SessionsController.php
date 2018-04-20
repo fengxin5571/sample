@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class SessionsController extends Controller
 {
@@ -23,6 +25,7 @@ class SessionsController extends Controller
         ]);
         if(Auth::attempt($data,$request->has("remember"))){
             if(Auth::user()->activated){
+                
                 session()->flash("success","欢迎回来");
                 session()->put("login_ip", [Auth::user()->id=>$request->getClientIp()]);
                 return redirect()->intended(route("users.show",[Auth::user()]));

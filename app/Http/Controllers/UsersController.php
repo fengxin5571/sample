@@ -9,6 +9,10 @@ use App\Http\Requests\UpdateUserPatch;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Faker\Provider\Image;
+use Illuminate\Support\Facades\Cache;
+use PHPUnit\Framework\Exception;
+use App\Jobs\SendReminderEmail;
 
 class UsersController extends Controller
 {
@@ -35,9 +39,12 @@ class UsersController extends Controller
     }
     //显示用户
     public  function show(Request $request,User $user){
+        
         $login_ip=session()->get("login_ip");
-        if($login_ip[$user->id]!=$request->getClientIp()){
-            session()->flash("warning","和您上次登录ip不一样");
+        if(array_key_exists($user->id, $login_ip)){
+            if($login_ip[$user->id]!=$request->getClientIp()){
+                session()->flash("warning","和您上次登录ip不一样");
+            }
         }
         $statuses=$user->statuses()->orderBy("created_at","desc")->paginate(5);
         return view('users.show', compact('user',"statuses"));        
@@ -57,7 +64,9 @@ class UsersController extends Controller
             "password"=>bcrypt($request->password),
             'sex'=>$request->sex,
         ]);
-        $this->sendEmailConfirmationTo($user);
+        //$this->sendEmailConfirmationTo($user);
+        //队列发送邮件 延迟60秒
+        dispatch(new SendReminderEmail($user))->delay(60);
         session()->flash('success', '验证邮件已发送到你的注册邮箱上，请注意查收。');
         return redirect('/');
 
